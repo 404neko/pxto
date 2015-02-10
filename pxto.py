@@ -122,6 +122,7 @@ ExpressList={	'ems':'EMS',
 				'zhongxinda':'忠信达',
 				'zhengzhoujianhua':'郑州建华'	}
 
+'''
 MakeExpress={	'ems':'ems',
 				'shentong':'shentong',
 				'申通快递':'shentong',
@@ -159,11 +160,15 @@ MakeExpress={	'ems':'ems',
 				'zhaijisong':'zhaijisong',
 				'zjs':'zhaijisong',
 				'邮政国内包裹':'youzhengguonei',
-				'邮政国内包裹':'youzhengguonei',
-				'邮政国内包裹':'youzhengguonei',
-				'邮政国内包裹':'youzhengguonei',
+				'youzhengguonei':'youzhengguonei',
+				'邮政':'youzhengguonei',
+				'youzheng':'youzhengguonei',
+				'yz':'youzhengguonei',
 				'邮政国际包裹':'youzhengguoji',
+				'youzhengguoji':'youzhengguoji',
+				'邮政国际':'youzhengguoji',
 				'EMS国际快递':'emsguoji',
+				'emsguoji':'emsguoji',
 				'AAE-中国':'aae',
 				'安捷快递':'anjiekuaidi',
 				'安信达':'anxindakuaixi',
@@ -268,6 +273,7 @@ MakeExpress={	'ems':'ems',
 				'芝麻开门':'zhimakaimen',
 				'忠信达':'zhongxinda',
 				'郑州建华':'zhengzhoujianhua'	}
+'''
 
 UrlBase0='http://www.kuaidi100.com/query?type='
 UrlBase2='&postid='
@@ -294,32 +300,31 @@ def Now():
 	Now=time.strftime('%Y-%m-%d %H:%M:%S')
 	return Now
 
-if len(sys.argv)!=3:
-	print 'Error: Pxto takes exactly 2 arguments','('+str(len(sys.argv)-1)+' given).'
-else:
-	Request=requests.get(UrlBase0+sys.argv[1]+UrlBase2+sys.argv[2])
-	#Request=requests.get('http://www.kuaidi100.com/query?type=yuantong&postid=560031072312')
-	if Request.status_code==200:
-		PJSON=json.loads(Request.content)
-		status=PJSON.get('status',-1)
-		if status==-1:
-			print 'Unknown error!'
-		else:
-			if status=='200':
-				print ('快递公司:	'+ExpressList.get(sys.argv[1],-1)).decode('utf8')
-				print ('运单号:	'+sys.argv[2]).decode('utf8')
-				print ('状态:	'+Status.get(PJSON.get('state','Unknown error!'),'Unknown error!')).decode('utf8')
-				print '================================'
-				for Item in PJSON.get('data',[{'time':Now(),'context':'Unknown error!'}]):
-					print '['+Item.get('time','Unknown error!')+']	'+Item.get('context','Unknown error!')
+def RunDirect():
+	if len(sys.argv)!=3:
+		print 'Error: Pxto takes exactly 2 arguments','('+str(len(sys.argv)-1)+' given).'
+	else:
+		Request=requests.get(UrlBase0+sys.argv[1]+UrlBase2+sys.argv[2])
+		if Request.status_code==200:
+			PJSON=json.loads(Request.content)
+			status=PJSON.get('status',-1)
+			if status==-1:
+				print 'Unknown error!'
 			else:
-				#if status=='201':
-				#print status
-				print '====================Error!===================='
-				print PJSON.get('message','Unknown error!')
-	raw_input()
-'''
+				if status=='200':
+					print ('快递公司:	'+ExpressList.get(sys.argv[1],-1)).decode('utf8')
+					print ('运单号:	'+sys.argv[2]).decode('utf8')
+					print ('状态:	'+Status.get(PJSON.get('state','Unknown error!'),'Unknown error!')).decode('utf8')
+					print '================================'
+					for Item in PJSON.get('data',[{'time':Now(),'context':'Unknown error!'}]):
+						print '['+Item.get('time','Unknown error!')+']	'+Item.get('context','Unknown error!')
+				else:
+					#if status=='201':
+					#print status
+					print '====================Error!===================='
+					print PJSON.get('message','Unknown error!')
+		print ('按任意键退出...\n').decode('utf8')
+		raw_input()
 
-Request=requests.get('ttp://www.kuaidi100.com/query?type=yuantong&postid=560031072312')
-print Request.status_code
-'''
+if __name__=='__main__':
+	RunDirect()
