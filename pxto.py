@@ -302,7 +302,7 @@ def Now():
 
 def RunDirect():
 	if len(sys.argv)!=3:
-		print 'Error: Pxto takes exactly 2 arguments','('+str(len(sys.argv)-1)+' given).'
+		print 'Error: Pxto requires 2 arguments','('+str(len(sys.argv)-1)+' given).'
 	else:
 		Request=requests.get(UrlBase0+sys.argv[1]+UrlBase2+sys.argv[2])
 		if Request.status_code==200:
@@ -312,9 +312,9 @@ def RunDirect():
 				print 'Unknown error!'
 			else:
 				if status=='200':
-					print ('快递公司:	'+ExpressList.get(sys.argv[1],-1)).decode('utf8')
-					print ('运单号:	'+sys.argv[2]).decode('utf8')
-					print ('状态:	'+Status.get(PJSON.get('state','Unknown error!'),'Unknown error!')).decode('utf8')
+					print ('快递公司: '+ExpressList.get(sys.argv[1],-1)).decode('utf8')
+					print ('运 单 号: '+sys.argv[2]).decode('utf8')
+					print ('状　　态: '+Status.get(PJSON.get('state','Unknown error!'),'Unknown error!')).decode('utf8')
 					print '================================'
 					for Item in PJSON.get('data',[{'time':Now(),'context':'Unknown error!'}]):
 						print '['+Item.get('time','Unknown error!')+']	'+Item.get('context','Unknown error!')
@@ -323,8 +323,7 @@ def RunDirect():
 					#print status
 					print '====================Error!===================='
 					print PJSON.get('message','Unknown error!')
-		print ('按任意键退出...\n').decode('utf8')
-		raw_input()
+		raw_input('Press Enter to exit')
 
 if __name__=='__main__':
 	RunDirect()
